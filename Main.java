@@ -9,5 +9,8 @@ public class Main {
         vitya.say("Geaorge");
         Person dima = new Person("dIMA");
         System.out.println(dima.height);
+
+        Student freshman = new Student(76,"ivan",2);
+        freshman.tell();
     }
 }

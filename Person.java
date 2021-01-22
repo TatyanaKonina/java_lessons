@@ -1,5 +1,5 @@
 public class Person {
-    public int height;
+    public int height = 0;
     public String name = "Default";
     public void say (String name){
         System.out.println("Hello, " + name);
