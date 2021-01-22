@@ -2,21 +2,17 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args){
-        // for(int i = 0;i < 10; ++i){
-        //     System.out.println(i);
-        // // }
-        int j = 0;
-        while (j < 20) {
-            j++;
-            if (j == 4){
-                continue;
-            }
-            System.out.println(j);
+        int[]a;
+        int n;
+        Scanner in = new Scanner(System.in);
+        System.out.println("enter n");
+        n = in.nextInt();
+        a = new int [n];
+        for(int i = 0; i<n;i++){
+            System.out.print("enter num");
+            a[i] = in.nextInt();
         }
-        // int x = 0;
-        // do {
-        //     x++;
-        //     System.out.println(x);
-        // }while(x < 10);
+        System.out.println("len: " + a.length);
+
     }
 }
