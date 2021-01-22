@@ -1,16 +1,12 @@
-import java.util.Scanner;
+
 import java.util.Arrays;
 public class Main {
     public static void main(String[] args){
-        System.out.println(func(3,4));
-        //int temp = func(3,4);
+        Person vitya = new Person();
+        vitya.height = 120;
+        System.out.println( vitya.height);
+        Person vlad = new Person();
+        System.out.println(vlad.height);
+        vitya.say("Geaorge");
     }
-    public static int func (int a,int b) {
-        int result = 1;
-        for (int i = 0; i < b;i++){
-            result *=a;
-        }
-        return result;
-    }
-
 }
