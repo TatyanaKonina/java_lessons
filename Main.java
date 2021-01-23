@@ -1,14 +1,14 @@
 public class Main {
-    public static int sum(int a,int b){
-        return a+b;
-    }
-    public static int sum(int a,int b,int c ) {
-        return a+b+c;
-    }
-    public static float sum(float a,float b,float c ) {
-        return a+b+c;
-    }
     public static void main(String[]args){
-        System.out.println(sum(23.23f,12.30f,5f));
+        final int b = 11;
+        //b = 55;//error
+        int x = Math.mult(12,54);
+        System.out.println(x);
+        Math a = new Math();
+        System.out.println(a.x);
+        Math.x = 225;
+        System.out.println(a.x);
+        Math a1 = new Math();
+        System.out.println(a1.x);
     }
 }
