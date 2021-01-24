@@ -1,27 +1,35 @@
+
+
 public class Complex {
     private final double realPart;
     private final double imagPart;
+    private final double angle;
+    private final double abs;
     public Complex(){
         this.imagPart = 0.0;
         this.realPart = 0.0;
+        this.angle = 0.0;
+        this.abs = 0.0;
     }
     public Complex(double realPart,double imagPart){
         this.imagPart = imagPart;
         this.realPart = realPart;
+        this.angle = Math.atan(this.imagPart/this.realPart);
+        this.abs = Math.sqrt(Math.pow(realPart,2) + Math.pow(imagPart,2));
     }
     public Complex addition(Complex object){
         Complex a = this;
-        return new Complex(a.imagPart + object.imagPart,a.realPart + object.realPart);
+        return new Complex(a.realPart + object.realPart,a.imagPart + object.imagPart);
     }
     public static Complex addition(Complex x,Complex y){
-        return new Complex(x.imagPart + y.imagPart,x.realPart + y.realPart);
+        return new Complex(x.realPart + y.realPart,x.imagPart + y.imagPart);
     }
     public Complex subtraction(Complex object){
         Complex a = this;
-        return new Complex(a.imagPart - object.imagPart,a.realPart - object.realPart);
+        return new Complex(a.realPart - object.realPart,a.imagPart - object.imagPart);
     }
     public static Complex subtraction(Complex x,Complex y){
-        return new Complex(x.imagPart - y.imagPart,x.realPart - y.realPart);
+        return new Complex(x.realPart - y.realPart,x.imagPart - y.imagPart);
     }
     public Complex multiplication(Complex object) {
         Complex a = this;
@@ -32,7 +40,6 @@ public class Complex {
         return new Complex(x.realPart * y.realPart - x.imagPart * y.imagPart, 
         x.realPart * y.imagPart + x.imagPart * y.realPart);
     }
-
     public Complex division(Complex object) {
         Complex a = this;
         double denom = Math.pow(object.imagPart,2) + Math.pow(object.realPart,2);
@@ -46,22 +53,27 @@ public class Complex {
         double imagPart = (y.realPart*x.imagPart - x.realPart * y.imagPart)/denom;
         return new Complex(realPart, imagPart);
     }
-    public double abs() {
-        return Math.sqrt(Math.pow(realPart,2) + Math.pow(imagPart,2));
+    public Complex sin() {
+        return new Complex(Math.sin(realPart) * Math.cosh(imagPart), 
+                           Math.cos(realPart) * Math.sinh(imagPart));
     }
-    public double arg(){
-        return Math.atan(imagPart/realPart);
+    public Complex cos() {
+        return new Complex(Math.cos(realPart) * Math.cosh(imagPart),
+                           -Math.sin(realPart) * Math.sinh(imagPart));
+    }
+    public String printTrigomometricForm(){
+        return String.format ("%.2f *(cos(%.2f) + i*sin(%.2f))\n",abs,angle,angle);
+    }
+    public String toString() {
+        if (imagPart == 0) return String.format("%.2f\n",realPart);
+        if (realPart == 0) return String.format("%.2f\n",imagPart);
+        if (imagPart <  0) return String.format("%.2f - %.2fi\n",realPart,(-imagPart));
+        return String.format("%.2f + %.2fi\n",realPart,imagPart);
     }
 
-    public String printTrigomometricForm(){
-        Complex a = this;
-        return a.abs() + "(cos(" + a.arg() + ")" +
-                       "i*sin(" + a.arg() + "))";
-    }
-    public String printComplex() {
-        if (imagPart == 0) return realPart + "";
-        if (realPart == 0) return imagPart + "i";
-        if (imagPart <  0) return realPart + " - " + (-imagPart) + "i";
-        return realPart + " + " + imagPart + "i";
+    public Complex fromTrigonometric(){
+        double realPart = Math.cos(angle) * abs;
+        double imagPart = Math.sin(angle) * abs;
+        return new Complex(realPart,imagPart);
     }
 }

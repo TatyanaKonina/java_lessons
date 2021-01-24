@@ -5,7 +5,7 @@ public class Main {
 
         System.out.println("a            = " + a);
         System.out.println("b            = " + b);
-        // System.out.println("Re(a)        = " + a.realPart);
+        // System.out.println("Re(a)        = " + a.realPart;
         // System.out.println("Im(a)        = " + a.imagPart);
         System.out.println("b + a        = " + b.addition(a));
         System.out.println("a - b        = " + a.subtraction(b));
@@ -14,5 +14,6 @@ public class Main {
         System.out.println("a / b        = " + a.division(b));
         System.out.println("(a / b) * b  = " + a.division(b).multiplication(b));
         System.out.println("trigonometric form      = " + a.printTrigomometricForm());
+        System.out.println("algera form      = " + a.fromTrigonometric());
     }
 }
