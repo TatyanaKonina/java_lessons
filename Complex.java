@@ -17,6 +17,24 @@ public class Complex {
         this.angle = Math.atan(this.imagPart/this.realPart);
         this.abs = Math.sqrt(Math.pow(realPart,2) + Math.pow(imagPart,2));
     }
+    public Complex(double realPart){
+        this.imagPart = 0.0;
+        this.realPart = realPart;
+        this.angle = 0.0;
+        this.abs = 0.0;
+    }
+    public double getReal(){
+        return this.realPart;
+    }
+
+    public double getImaginary(){
+        return this.imagPart;
+    }
+    // public Complex makeAlgebraForm(double angle, double abs) {
+    //     double imagPart = Math.cos(angle) * abs;
+    //     double realPart = Math.sin(angle) * abs;
+    //     return new Complex(realPart,imagPart);
+    // }
     public Complex addition(Complex object){
         Complex a = this;
         return new Complex(a.realPart + object.realPart,a.imagPart + object.imagPart);
@@ -62,18 +80,22 @@ public class Complex {
                            -Math.sin(realPart) * Math.sinh(imagPart));
     }
     public String printTrigomometricForm(){
+
         return String.format ("%.2f *(cos(%.2f) + i*sin(%.2f))\n",abs,angle,angle);
     }
     public String toString() {
-        if (imagPart == 0) return String.format("%.2f\n",realPart);
-        if (realPart == 0) return String.format("%.2f\n",imagPart);
-        if (imagPart <  0) return String.format("%.2f - %.2fi\n",realPart,(-imagPart));
-        return String.format("%.2f + %.2fi\n",realPart,imagPart);
+        if (imagPart == 0) return String.format("%.2f",realPart);
+        if (realPart == 0) return String.format("%.2f",imagPart);
+        if (imagPart <  0) return String.format("%.2f - %.2fi",realPart,(-imagPart));
+        return String.format("%.2f + %.2fi",realPart,imagPart);
     }
 
     public Complex fromTrigonometric(){
         double realPart = Math.cos(angle) * abs;
         double imagPart = Math.sin(angle) * abs;
         return new Complex(realPart,imagPart);
+    }
+    public Complex scale(double alpha) {
+        return new Complex(alpha * realPart, alpha * imagPart);
     }
 }
