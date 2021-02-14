@@ -61,15 +61,15 @@ public class Matrix {
         return result;
     }
 
-    public Complex determinant1() {
+    public Complex determinant() {
         if (m != n) {
             throw new RuntimeException("Error");
         }
         else {
-            return determinant(this);
+            return _determinant(this);
         }
     }
-    private Complex determinant(Matrix object) {
+    private Complex _determinant(Matrix object) {
             if (object.n == 1) {
                 return object.matrix[0][0];
             } 
@@ -82,8 +82,8 @@ public class Matrix {
                 Complex result = new Complex();
                 for (int i = 0; i < object.n; ++i) {
                     Matrix sub = subMatrix(object, 1, i + 1);
-                    Complex tmp = object.matrix[0][i].scale(Math.pow(-1, 1 + i + 1)).multiplication(determinant(sub));
-                    result.addition(tmp);
+                    Complex tmp = object.matrix[0][i].scale(Math.pow(-1, 1 + i + 1)).multiplication(_determinant(sub));
+                    result = result.addition(tmp);
                 }
                 return result;
             }

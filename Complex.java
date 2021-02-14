@@ -30,11 +30,11 @@ public class Complex {
     public double getImaginary(){
         return this.imagPart;
     }
-    // public Complex makeAlgebraForm(double angle, double abs) {
-    //     double imagPart = Math.cos(angle) * abs;
-    //     double realPart = Math.sin(angle) * abs;
-    //     return new Complex(realPart,imagPart);
-    // }
+    public Complex makeAlgebraForm(double angle, double abs) {
+        double imagPart = Math.cos(angle) * abs;
+        double realPart = Math.sin(angle) * abs;
+        return new Complex(realPart,imagPart);
+    }
     public Complex addition(Complex object){
         Complex a = this;
         return new Complex(a.realPart + object.realPart,a.imagPart + object.imagPart);
