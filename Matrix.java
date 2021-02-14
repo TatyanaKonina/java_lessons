@@ -8,7 +8,7 @@ public class Matrix {
         this.m = m;
         this.n = n;
         matrix = new Complex[m][n];
-        //lflffk
+        
     }
     public Matrix(Complex[][] object) {
         m = object.length;
