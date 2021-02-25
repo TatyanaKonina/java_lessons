@@ -1,28 +1,26 @@
 package fileLab.src.main.java.method;
 
 import java.io.*;
+import java.util.HashMap;
 
 public class Parser {
-    private String text;
+    private HashMap<Character, Integer> map = new HashMap<>();
 
-    public String parser(String path){
+    public HashMap<Character, Integer> parser(String path) {
         try {
-            BufferedReader in = new BufferedReader(new FileReader(path));
-            // String str = in.readLine().trim();
-            // text+= str;
-            for (String line;(line = in.readLine()) != null;) {
-                text+= line;
+            FileInputStream file = new FileInputStream(new File(path));
+            while (file.available() > 0) {
+                char ch = (char) file.read();
+                if (map.containsKey(ch)) {
+                    map.replace(ch, map.get(ch) + 1);
+                } else {
+                    map.put(ch, 1);
+                }
             }
-            in.close();
-            return text;
+            file.close();
+            return map;
         } catch (IOException ex) {
-            // System.out.println(ex.getMessage());
             return null;
         }
     }
-
-    // private InputStream openFile(String path) throws FileNotFoundException {
-    //     InputStream is = this.getClass().getResourceAsStream(path);
-    //     return is;
-    // }
 }
