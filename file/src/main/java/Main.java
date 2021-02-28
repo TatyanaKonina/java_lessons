@@ -1,11 +1,12 @@
-package file.src.main.java.method;
+package file.src.main.java;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
 public class Main {
-    private final static String inputDir = "/home/tdkonina/java_lessons/file/src/main/java/method/";
+    private final static String resourcesPath = "/file/src/resources/";
+    private final static String resultPath = "/file/src/result/";
 
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
@@ -13,23 +14,27 @@ public class Main {
         HashMap<Character, Integer> map = new HashMap<>();
         map = null;
         for (int attempts = 0; !(attempts > 5 | userOutput.equals("\\q") | map != null); attempts++) {
-            System.out.println(!(attempts > 5 | userOutput.equals("\\q") | map != null));
+            System.out.println("Print file name:");
             userOutput = in.nextLine();
-            Parser parser = new Parser();
-
+            Result result = new Result();
             if (attempts == 0) {
-                userOutput = inputDir + userOutput;
+                userOutput = System.getProperty("user.dir") + resourcesPath + userOutput;
+                System.out.println(userOutput);
             }
-            map = parser.parser(userOutput);
+            map = result.parser(userOutput);
             if (map == null) {
                 System.out.println(
                         "We can't find your file in current dir\nPlease, write the whole path and we try it again");
                 continue;
             }
+            else{
+
+            }
         }
-        for (Map.Entry<Character, Integer> pair : map.entrySet()) {
-            System.out.println(pair.getKey() + " " + pair.getValue());
-        }
+
+        // for (Map.Entry<Character, Integer> pair : map.entrySet()) {
+        //     System.out.println(pair.getKey() + " " + pair.getValue());
+        // }
 
     }
 }
