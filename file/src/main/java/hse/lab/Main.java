@@ -1,7 +1,7 @@
-package file.src.main.java;
+package hse.lab;
 
 import java.util.HashMap;
-import java.util.Map;
+
 import java.util.Scanner;
 
 public class Main {
@@ -13,11 +13,14 @@ public class Main {
         String userOutput = "";
         HashMap<Character, Integer> map = new HashMap<>();
         map = null;
-        for (int attempts = 0; !(attempts > 5 | userOutput.equals("\\q") | map != null); attempts++) {
-            System.out.println("Print file name:");
+        for (int attempts = 0; !(attempts > 5 | map != null); attempts++) {
+            System.out.println("Write '\\q' to exit\nPrint file name:");
             userOutput = in.nextLine();
             Result result = new Result();
-            if (attempts == 0) {
+            if (userOutput.equals("\\q")){
+                break;
+            }
+            if (attempts == 0 ) {
                 userOutput = System.getProperty("user.dir") + resourcesPath + userOutput;
                 System.out.println(userOutput);
             }
@@ -28,13 +31,8 @@ public class Main {
                 continue;
             }
             else{
-
+                result.writeToFile(System.getProperty("user.dir") + resultPath + "sol.txt" );
             }
         }
-
-        // for (Map.Entry<Character, Integer> pair : map.entrySet()) {
-        //     System.out.println(pair.getKey() + " " + pair.getValue());
-        // }
-
     }
 }

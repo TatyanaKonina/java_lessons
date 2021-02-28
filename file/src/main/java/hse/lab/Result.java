@@ -1,6 +1,11 @@
-package file.src.main.java;
+package hse.lab;
 
-import java.io.*;
+import java.util.Map;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.HashMap;
 
 public class Result {
@@ -28,7 +33,7 @@ public class Result {
                 // считываем остальные строки в цикле
                 line = reader.readLine();
             }
-            // file.close();
+            reader.close();
             return map;
         } catch (IOException ex) {
             return null;
@@ -42,8 +47,10 @@ public class Result {
             File file = new File(pathToFile);
             FileOutputStream fileOutputStream = new FileOutputStream(file);
 
-            // fileOutputStream.write();
-
+            for (Map.Entry<Character, Integer> pair : map.entrySet()) {
+                fileOutputStream.write((pair.getKey() + " " + pair.getValue() + "\n").getBytes());
+                System.out.println(pair.getKey() + " " + pair.getValue());
+            }
             fileOutputStream.close();
 
         } catch (IOException ex) {
