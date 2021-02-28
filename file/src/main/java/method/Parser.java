@@ -1,4 +1,4 @@
-package fileLab.src.main.java.method;
+package file.src.main.java.method;
 
 import java.io.*;
 import java.util.HashMap;
