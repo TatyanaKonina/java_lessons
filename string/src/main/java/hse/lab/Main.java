@@ -15,8 +15,6 @@ public class Main {
         Scanner in = new Scanner(System.in);
 
         while (true) {
-
-            // String userOutput = "";
             System.out.println("Введите имя");
             name = in.nextLine();
             System.out.println("Введите фамилию");
