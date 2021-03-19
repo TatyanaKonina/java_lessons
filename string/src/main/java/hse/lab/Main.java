@@ -27,7 +27,7 @@ public class Main {
             System.out.println("Все поля обязательны для заполнения, попробуйте снова");
         }
         while (true) {
-            System.out.println("Введите дату рождения");
+            System.out.println("Введите дату рождения в формате 'dd.MM.yyyy'");
             date = in.nextLine();
             SimpleDateFormat myFormat = new SimpleDateFormat("dd.MM.yyyy");
             myFormat.setLenient(false);
