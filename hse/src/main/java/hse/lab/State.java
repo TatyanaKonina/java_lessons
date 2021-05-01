@@ -1,0 +1,11 @@
+package hse.lab;
+
+enum State {
+    STATE_INITIAL,
+	STATE_UP,
+	STATE_DOWN,
+	STATE_OPENING,
+	STATE_WAITING,
+	STATE_CLOSING,
+	STATE_READY
+}

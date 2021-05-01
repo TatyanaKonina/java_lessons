@@ -2,50 +2,78 @@ package hse.lab;
 
 import java.lang.Math;
 public class Person implements ElevatorObject {
-	static int ID=0; //用于标志每个人
-	int elevatorId;
-	int identity;
-	int floor0; //初始楼层
-	int d_floor; //目标楼层
-	int time0; //开始等待的时刻
-	int outtime; //出电梯的时刻
-	int boredtime; //开始不耐烦的时刻
-	int time_interval; //下一人与他的时间间隔
-	boolean bored=false; //是否变的不耐烦
-	boolean nextone=false; //下一个人是否到来
-	boolean nextonecome=false; //下一个人是否产生
-	boolean inelevator=false; //是否进入电梯
-	boolean outelevator=false; //是否已经出电梯
-	boolean boarding=false; //是否正在上电梯
-	boolean going=false; //是否正在离开 后续加入
+	static int ID=0; //Used to mark everyone in gui
+	private int elevatorId;
+	private int identity;
+	private int floorWhere; //Initial Floor
+	private int destinationFloor; //Target Floor
+	public int timeWait; //The moment to start waiting
+	public int outtime; //Out of the elevator moment
+	public int boredtime; 
+	public int time_interval; 
+	public boolean bored=false; 
+	public boolean nextone=false; //Is the next person coming?
+	public boolean nextonecome=false; //Does the next person produce
+	private boolean inelevator=false; 
+	private boolean outelevator=false; 
+	private boolean boarding=false; //Are you getting on the elevator?
 	final int WAITTIME=300;
-	final int OUTTIME=100; //出电梯后的显示时间
+	final int OUTTIME=100; //Display time after out of the elevator
 	final int REMAININGTIME=150;
 	final int MAXINTERVAL=120;
 	final int MININTERVAL=20;
 	public Person(int t)
 	{
-		floor0=(int)(Math.random()*floor_num);
+		floorWhere=(int)(Math.random()*floor_num);
 		identity=++ID;
-		while((d_floor=(int)(Math.random()*floor_num))==floor0); //d_floor要取与floor不同的数
-		time0=t;
+		while((destinationFloor=(int)(Math.random()*floor_num))==floorWhere); 
+		timeWait=t;
 		while((time_interval=(int)(Math.random()*MAXINTERVAL))<MININTERVAL);
 		
 	}
-	int getElevatorId(){
+	public int getInitialFloor(){
+		return floorWhere;
+	}
+
+	public int getElevatorId(){
 		return elevatorId;
 	}
-	void setElevatorId(int id){
+	public int getIdentity(){
+		return identity;
+	}
+	public int getDestinationFloor(){
+		return destinationFloor;
+	}
+	public boolean cheakInElevator(){
+		return inelevator;
+	}
+	public boolean checkOutElevator(){
+		return outelevator;
+	}
+	public void setOutElevator(boolean b){
+		this.outelevator = b;
+	}
+	public void setInElevator(boolean b){
+		this.inelevator = b;
+	}
+	public void setBoarding(boolean b){
+		this.boarding = b;
+	}
+	public boolean getBoarding(){
+		return boarding;
+	}
+
+	public void setElevatorId(int id){
 		this.elevatorId = id;
 	}
-	void upDate(int t, elevator machine)
+	public void upDate(int t, elevator machine)
 	{
 		if(!inelevator&&bored==false&&!boarding) 
-			if(t-time0>=WAITTIME) 
+			if(t-timeWait>=WAITTIME) 
 			{
-				if(Math.abs(machine.getPosition()-floor0)>=1)
+				if(Math.abs(machine.getPosition()-floorWhere)>=1)
 				{bored=true;boredtime=t;}
 			}
-		if(t-time0>=time_interval) nextone=true;
+		if(t-timeWait>=time_interval) nextone=true;
 	}
 }

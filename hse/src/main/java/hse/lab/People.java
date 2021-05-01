@@ -10,36 +10,36 @@ public class People implements ElevatorObject {
 		int minElevator = 0;
 		
 		for (int i =0;i<machines.size();i++){
-			if (machines.get(i).getState() == STATE_UP && floor0 > machines.get(i).current_floor){
-				if(machines.get(minElevator).current_floor > machines.get(i).current_floor){
+			if (machines.get(i).getState() == State.STATE_UP && floor0 > machines.get(i).getCurentFloor()){
+				if(machines.get(minElevator).getCurentFloor() > machines.get(i).getCurentFloor()){
 					minElevator = i;
 				}
 			}
-			else if (machines.get(i).getState() == STATE_DOWN && floor0 < machines.get(i).current_floor){
-				if(machines.get(minElevator).current_floor < machines.get(i).current_floor){
+			else if (machines.get(i).getState() == State.STATE_DOWN && floor0 < machines.get(i).getCurentFloor()){
+				if(machines.get(minElevator).getCurentFloor() < machines.get(i).getCurentFloor()){
 					minElevator = i;
 				}
 			}
 			else{
-				if (Math.abs(floor0 - machines.get(i).current_floor) < Math.abs(machines.get(minElevator).current_floor - machines.get(i).current_floor) ){
+				if (Math.abs(floor0 - machines.get(i).getCurentFloor()) < Math.abs(machines.get(minElevator).getCurentFloor() - machines.get(i).getCurentFloor()) ){
 					minElevator = i;
 				}
 			}
-			// System.out.println(minElevator);
 		}
 		return minElevator;
 		
 	}
 
-	void upDate(int t, ArrayList<elevator> machines) // 处理新人的到来，等烦的人的离去 到达的人适时删去
+	void upDate(int t, ArrayList<elevator> machines) 
+	//To deal with the arrival of new people, wait for the departure of annoying people to arrive in time to delete
 	{
 
 		if (crew.size() == 0) {
 			crew.add(new Person(t));
 			
-			int machine = chooseMachine(machines,crew.get(crew.size() - 1).floor0);
+			int machine = chooseMachine(machines,crew.get(crew.size() - 1).getInitialFloor());
 			crew.get(crew.size() - 1).setElevatorId(machine);
-			machines.get(machine).ex_button[crew.get(crew.size() - 1).floor0] = true;
+			machines.get(machine).getExButtons()[crew.get(crew.size() - 1).getInitialFloor()] = true;
 		} else
 			for (int i = 0; i <= crew.size() - 1; i++) {
 				int machine = crew.get(i).getElevatorId();
@@ -48,16 +48,17 @@ public class People implements ElevatorObject {
 					if (!crew.get(i).nextonecome) {
 						crew.add(new Person(t));
 
-						machine = chooseMachine(machines,crew.get(crew.size() - 1).floor0);
+						machine = chooseMachine(machines,crew.get(crew.size() - 1).getInitialFloor());
 						crew.get(crew.size() - 1).setElevatorId(machine);
-						machines.get(machine).ex_button[crew.get(crew.size() - 1).floor0] = true;
+						machines.get(machine).getExButtons()[crew.get(crew.size() - 1).getInitialFloor()] = true;
 						crew.get(i).nextonecome = true;
-						System.out.println("User " + crew.get(crew.size() - 1).identity + " elevator " + machine + " flo0r0 " + crew.get(crew.size() - 1).floor0 + " to: " + crew.get(crew.size() - 1).d_floor);
+						// debug
+						System.out.println("User " + crew.get(crew.size() - 1).getIdentity() + " elevator " + machine + " flo0r0 " + crew.get(crew.size() - 1).getInitialFloor() + " to: " + crew.get(crew.size() - 1).getDestinationFloor());
 					}
-					// if(crew.get(i).bored) crew.remove(i); //如果有人等的时间过长，而且下一位已经来到，就可以移除了
+					
 				}
-				if (crew.get(i).inelevator) {
-					if (crew.get(i).outelevator)
+				if (crew.get(i).cheakInElevator()) {
+					if (crew.get(i).checkOutElevator())
 						if (t - crew.get(i).outtime >= crew.get(i).OUTTIME)
 							crew.remove(i);
 				}
@@ -73,63 +74,54 @@ public class People implements ElevatorObject {
 		return crew;
 	}
 
-	boolean getOn(int current_floor, int t, elevator machine) // 让电梯停下的楼层内等候的人上电梯
+	boolean getOn(int current_floor, int t, elevator machine) // Let the elevator stop on the floor waiting for people to get on the elevator
 	{
 
 		for (int i = 0; i <= crew.size() - 1;) {
-			if (crew.get(i).floor0 == current_floor && !crew.get(i).bored && !crew.get(i).inelevator)
-			// 人满足的条件：1.身处current_floor 2.还没无聊 3.还没进电梯
+			if (crew.get(i).getInitialFloor() == current_floor && !crew.get(i).bored && !crew.get(i).cheakInElevator())
+			// People meet the conditions: 1.It is located in current_floor 2.Not boring 3.We're not in the elevator yet.
 			{
 				if (counter == 0)
 					counter = t;
 				if (((t - counter) % ENTERTIME == 0) && t != counter) // 每ENTERTIME个单位时间才执行一次内部代码
 				{
 					counter = t;
-					crew.get(i).inelevator = true;
-					crew.get(i).boarding = false;
-					machine.button[crew.get(i).d_floor] = true; // 在内部按按钮的操作
+					crew.get(i).setInElevator(true);
+					crew.get(i).setBoarding(false);
+					machine.getButtons()[crew.get(i).getDestinationFloor()] = true; // 在内部按按钮的操作
 				} else
-					crew.get(i).boarding = true;
+					crew.get(i).setBoarding(true);
 				return false;
 			}
 			i++;
 		}
 		counter = 0;
-		return true; // 表示所有该上的人都已经上电梯了
+		return true; // It means everyone who should be on the elevator is already on the elevator.
 	}
 
-	boolean getOff(int current_floor, int t) // 让电梯停下的楼层是目的地的人下电梯
+	boolean getOff(int current_floor, int t) // The floor where the elevator stops is where the destination person gets off the elevator.
 	{
 
 		for (int i = 0; i <= crew.size() - 1;) {
-			if (crew.get(i).d_floor == current_floor && crew.get(i).inelevator && !crew.get(i).outelevator)
-			// 人满足的条件：目的地是current_floor 2.已经在电梯了 3. 还没出电梯
+			if (crew.get(i).getDestinationFloor() == current_floor && crew.get(i).cheakInElevator() && !crew.get(i).checkOutElevator())
+			// People meet the conditions:the destination is current_floor 2.Already in the elevator 3. We're not out of the elevator yet.
 			{
 				if (counter2 == 0)
 					counter2 = t;
-				if (((t - counter2) % ENTERTIME == 0) && t != counter2) // 每ENTERTIME个单位时间才执行一次内部代码
+				if (((t - counter2) % ENTERTIME == 0) && t != counter2) 
 				{
 					counter2 = t;
-					crew.get(i).outelevator = true;
+					crew.get(i).setOutElevator(true);
 					crew.get(i).outtime = t;
-					crew.get(i).boarding = false;
+					crew.get(i).setBoarding(false);
 					
 				} else
-					crew.get(i).boarding = true;
+					crew.get(i).setBoarding(true);
 				return false;
 			}
 			i++;
 		}
 		counter2 = 0;
-		return true; // 表示所有该下的人都已经下电梯了
+		return true; // It means everyone who should get off the elevator has got off the elevator.
 	}
-
-	void Print() {
-		for (int i = 0; i <= crew.size() - 1; i++) {
-			System.out.println("crew" + i);
-			System.out.println("floor0" + crew.get(i).floor0);
-			System.out.println("d_floor" + crew.get(i).d_floor);
-		}
-	}
-
 }
