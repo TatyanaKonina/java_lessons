@@ -13,6 +13,7 @@ public class Draw extends JPanel implements ElevatorObject {
 	final int PERSON_WIDTH = 18;
 	final int PERSON_INTERVAL = 20; 
 	final int BUTTON_INTERVAL = 25;
+	final int ELEVATOR_SHIFT = 100;
 	int BUTTON_Y = 30;
 
 	public Draw(int elevatorsNum) {
@@ -48,7 +49,7 @@ public class Draw extends JPanel implements ElevatorObject {
 
 	public void paintElevator(Graphics2D g, int y, int i) {
 		g.setColor(Color.BLACK);
-		g.drawRect(getElevatorXcord() + 100 + i * (ELEVATOR_WIDTH + 100), y - ELEVATOR_HEIGHT, ELEVATOR_WIDTH,
+		g.drawRect(getElevatorXcord() + ELEVATOR_SHIFT + i * (ELEVATOR_WIDTH + ELEVATOR_SHIFT), y - ELEVATOR_HEIGHT, ELEVATOR_WIDTH,
 				ELEVATOR_HEIGHT);
 		String str = new String();
 		if (machines.get(i).getState() == State.STATE_OPENING)
@@ -63,20 +64,20 @@ public class Draw extends JPanel implements ElevatorObject {
 			str = "Going down";
 		if (machines.get(i).getState() == State.STATE_INITIAL)
 			str = "Initial State";
-		g.drawString(str, getElevatorXcord() + 100 + i * (ELEVATOR_WIDTH + 100), y - ELEVATOR_HEIGHT - 5);
+		g.drawString(str, getElevatorXcord() + 100 + i * (ELEVATOR_WIDTH + ELEVATOR_SHIFT), y - ELEVATOR_HEIGHT - 5);
 	}
 
 	public void paintPeople(Graphics2D g, int id) {
 		g.setFont(new Font("Calibri", Font.PLAIN, 16));
 		ArrayList<Person> p = crew.getPeople();
-		int[] coord_x = new int[floor_num];
-		int coord_x2 = getElevatorXcord() + 100 + id * (ELEVATOR_WIDTH + 100);
+		int[] coord_wait = new int[floor_num];
+		int coordInElevator = getElevatorXcord() + ELEVATOR_SHIFT + id * (ELEVATOR_WIDTH + ELEVATOR_SHIFT);
 		for (int i = 0; i <= floor_num - 1; i++) {
-			coord_x[i] = getElevatorXcord() - 2 * PERSON_WIDTH + 100 + id * (ELEVATOR_WIDTH + 100);
+			coord_wait[i] = getElevatorXcord() - 2 * PERSON_WIDTH + ELEVATOR_SHIFT + id * (ELEVATOR_WIDTH + ELEVATOR_SHIFT);
 		}
 		for (int i = 0; i <= p.size() - 1; i++) {
 			if (p.get(i).getElevatorId() == id) {
-				if (!p.get(i).cheakInElevator()) // 画在外等待的人 用红色画不耐烦的人 蓝色画正常等待的人 黄色画正在上电梯的人
+				if (!p.get(i).cheakInElevator()) // Draw people waiting outside Draw impatient people in red Draw impatient people in blue Draw normal waiting people in yellow draw people on the elevator
 				{
 					if (p.get(i).bored)
 						g.setColor(Color.RED);
@@ -84,32 +85,32 @@ public class Draw extends JPanel implements ElevatorObject {
 						g.setColor(Color.YELLOW);
 					else
 						g.setColor(Color.BLUE);
-					g.fillOval(coord_x[p.get(i).getInitialFloor()], calYPosition(p.get(i).getInitialFloor()) - PERSON_WIDTH, PERSON_WIDTH,
+					g.fillOval(coord_wait[p.get(i).getInitialFloor()], calYPosition(p.get(i).getInitialFloor()) - PERSON_WIDTH, PERSON_WIDTH,
 							PERSON_WIDTH);
 					g.setColor(Color.GRAY);
-					g.drawString(String.valueOf(p.get(i).getIdentity()), coord_x[p.get(i).getInitialFloor()],
+					g.drawString(String.valueOf(p.get(i).getIdentity()), coord_wait[p.get(i).getInitialFloor()],
 							calYPosition(p.get(i).getInitialFloor()) - PERSON_WIDTH);
-					coord_x[p.get(i).getInitialFloor()] -= PERSON_INTERVAL;
-				} else // 画正在坐电梯的人 用橙色
+					coord_wait[p.get(i).getInitialFloor()] -= PERSON_INTERVAL;
+				} else // Painting the man who is taking the elevator in orange
 				{
 					if (!p.get(i).checkOutElevator() && p.get(i).getElevatorId() == id) {
 						g.setColor(Color.ORANGE);
-						g.fillOval(coord_x2,
+						g.fillOval(coordInElevator,
 								calYPosition(machines.get(p.get(i).getElevatorId()).getPosition()) - PERSON_WIDTH,
 								PERSON_WIDTH, PERSON_WIDTH);
 						g.setColor(Color.GRAY);
-						g.drawString(String.valueOf(p.get(i).getIdentity()), coord_x2,
+						g.drawString(String.valueOf(p.get(i).getIdentity()), coordInElevator,
 								calYPosition(machines.get(p.get(i).getElevatorId()).getPosition()) - PERSON_WIDTH);
-						coord_x2 += PERSON_INTERVAL;
-					} else // 已经下电梯的人 用绿色
+						coordInElevator += PERSON_INTERVAL;
+					} else // People who have gotten off the elevator use green
 					{
 						g.setColor(Color.GREEN);
-						g.fillOval(coord_x[p.get(i).getDestinationFloor()], calYPosition(p.get(i).getDestinationFloor()) - PERSON_WIDTH,
+						g.fillOval(coord_wait[p.get(i).getDestinationFloor()], calYPosition(p.get(i).getDestinationFloor()) - PERSON_WIDTH,
 								PERSON_WIDTH, PERSON_WIDTH);
 						g.setColor(Color.GRAY);
-						g.drawString(String.valueOf(p.get(i).getIdentity()), coord_x[p.get(i).getDestinationFloor()],
+						g.drawString(String.valueOf(p.get(i).getIdentity()), coord_wait[p.get(i).getDestinationFloor()],
 								calYPosition(p.get(i).getDestinationFloor()) - PERSON_WIDTH);
-						coord_x[p.get(i).getDestinationFloor()] -= PERSON_INTERVAL;
+								coord_wait[p.get(i).getDestinationFloor()] -= PERSON_INTERVAL;
 					}
 
 				}
@@ -125,23 +126,23 @@ public class Draw extends JPanel implements ElevatorObject {
 				g.setColor(Color.BLACK);
 			else
 				g.setColor(Color.GRAY);
-			g.drawString(String.valueOf(i), (getWidth() / (2 * floor_num) * i), BUTTON_Y + 25 + id * 100);
+			g.drawString(String.valueOf(i), (getWidth() / (2 * floor_num) * i), BUTTON_Y * 2 + id * ELEVATOR_SHIFT);
 			if (machines.get(id).getExButtons()[i])
 				g.setColor(Color.BLACK);
 			else
 				g.setColor(Color.GRAY);
 			g.drawString(String.valueOf(i), getWidth() / (2 * floor_num) * i,
-					BUTTON_Y + 25 + BUTTON_INTERVAL + id * 50);
+					BUTTON_Y*2 + BUTTON_INTERVAL + id * 50);
 		}
 		g.setFont(new Font("等线", Font.PLAIN, 20));
 		g.setColor(Color.BLACK);
-		g.drawString("Elevator " + id, getWidth() / 2, BUTTON_Y + id * 100);
-		g.drawString("Внутренние кнопки", getWidth() / 2, BUTTON_Y + BUTTON_INTERVAL + id * 100);
-		g.drawString("Внешние кнопки", getWidth() / 2, BUTTON_Y + BUTTON_INTERVAL * 2 + id * 100);
+		g.drawString("Elevator " + id, getWidth() / 2, BUTTON_Y + id * ELEVATOR_SHIFT);
+		g.drawString("Внутренние кнопки", getWidth() / 2, BUTTON_Y + BUTTON_INTERVAL + id * ELEVATOR_SHIFT);
+		g.drawString("Внешние кнопки", getWidth() / 2, BUTTON_Y + BUTTON_INTERVAL * 2 + id * ELEVATOR_SHIFT);
 		g.setFont(new Font("Calibri", Font.BOLD, 20));
 		g.setColor(Color.GRAY);
 		for (int i = 0; i <= floor_num - 1; i++)
-			g.drawString(String.valueOf(i), getElevatorXcord() + 250 + id * (ELEVATOR_WIDTH + 100), calYPosition(i));
+			g.drawString(String.valueOf(i), getElevatorXcord() + 250 + id * (ELEVATOR_WIDTH + ELEVATOR_SHIFT), calYPosition(i));
 
 	}
 
